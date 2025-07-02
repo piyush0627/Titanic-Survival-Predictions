@@ -1,0 +1,63 @@
+# 🚢 Titanic Survival Prediction using Logistic Regression
+
+# Step 1: Import required libraries
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from sklearn.preprocessing import LabelEncoder
+
+# Step 2: Upload and Load the dataset
+from google.colab import files
+uploaded = files.upload()  # Upload titanic_train.csv
+
+df = pd.read_csv('titanic_train.csv')
+
+# Step 3: Explore the data
+print(df.head())
+print("\nMissing values:\n", df.isnull().sum())
+
+# Step 4: Data Cleaning
+# Fill missing Age with median
+df['Age'].fillna(df['Age'].median(), inplace=True)
+
+# Fill missing Embarked with mode
+df['Embarked'].fillna(df['Embarked'].mode()[0], inplace=True)
+
+# Drop Cabin column (too many missing values)
+df.drop('Cabin', axis=1, inplace=True)
+
+# Drop Ticket and Name columns (not useful for prediction)
+df.drop(['Ticket', 'Name'], axis=1, inplace=True)
+
+# Step 5: Convert categorical to numeric
+label = LabelEncoder()
+df['Sex'] = label.fit_transform(df['Sex'])         # male=1, female=0
+df['Embarked'] = label.fit_transform(df['Embarked']) # S=2, C=0, Q=1
+
+# Step 6: Define features and target
+X = df.drop(['Survived', 'PassengerId'], axis=1)
+y = df['Survived']
+
+# Step 7: Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Step 8: Train the model
+model = LogisticRegression(max_iter=200)
+model.fit(X_train, y_train)
+
+# Step 9: Predict and evaluate
+y_pred = model.predict(X_test)
+
+print("✅ Accuracy:", accuracy_score(y_test, y_pred))
+print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("\nClassification Report:\n", classification_report(y_test, y_pred))
+
+# Step 10: Visualize correlation
+plt.figure(figsize=(8,6))
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+plt.title("Feature Correlation Heatmap")
+plt.show()
