@@ -1,76 +1,46 @@
-# 🚢 Titanic Survival Prediction (Machine Learning Project)
+# README: Titanic Survival Prediction
+## Domain: Data Science
 
-This project predicts the survival of passengers on the Titanic using supervised machine learning models. Based on historical passenger data such as age, gender, class, etc., the model determines the likelihood of survival.
+## Aim
 
-## 📊 Objective
+The aim of this project is to build a model that predicts whether a passenger on the Titanic survived or not based on given features.
 
-To apply classification algorithms (like Logistic Regression, Decision Trees, Random Forest) to predict whether a passenger survived the Titanic disaster or not.
+## Dataset
 
-## 📁 Dataset
+The dataset for this project is imported from a CSV file, "archive.zip". The dataset contains information about passengers on the Titanic, including their survival status, class (Pclass), sex (Gender), and age (Age).
 
-We use the famous Titanic dataset available from Kaggle:
+## Libraries Used
 
-- **Source**: [Kaggle Titanic Dataset](https://www.kaggle.com/competitions/titanic/data)
-- **Files**:
-  - `train.csv` - contains the training data with labels (survived or not).
-  - `test.csv` - used for testing the model predictions.
-  - `gender_submission.csv` - sample submission format.
+The following important libraries were used for this project:
 
-### 🔢 Sample Raw Data (train.csv)
+- numpy
+- pandas
+- matplotlib.pyplot
+- seaborn
+- sklearn.preprocessing.LabelEncoder
+- sklearn.model_selection.train_test_split
+- sklearn.linear_model.LogisticRegression
 
-| PassengerId | Survived | Pclass | Name                             | Sex    | Age  | SibSp | Parch | Ticket   | Fare   | Cabin | Embarked |
-|-------------|----------|--------|----------------------------------|--------|------|--------|--------|----------|--------|--------|-----------|
-| 1           | 0        | 3      | Braund, Mr. Owen Harris          | male   | 22   | 1      | 0      | A/5 21171| 7.25   | NaN    | S         |
-| 2           | 1        | 1      | Cumings, Mrs. John Bradley (Florence Briggs Thayer)| female | 38 | 1 | 0 | PC 17599 | 71.2833| C85   | C         |
-| ...         | ...      | ...    | ...                              | ...    | ...  | ...    | ...    | ...      | ...    | ...    | ...       |
+## Data Exploration and Preprocessing
 
-## 🧠 Features Used
+1. The dataset was loaded using pandas as a DataFrame, and its shape and a glimpse of the first 10 rows were displayed using `df.shape` and `df.head(10)`.
+2. Descriptive statistics for the numerical columns were displayed using `df.describe()` to get an overview of the data, including missing values.
+3. The count of passengers who survived and those who did not was visualized using `sns.countplot(x=df['Survived'])`.
+4. The count of survivals was visualized with respect to the Pclass using `sns.countplot(x=df['Survived'], hue=df['Pclass'])`.
+5. The count of survivals was visualized with respect to the gender using `sns.countplot(x=df['Sex'], hue=df['Survived'])`.
+6. The survival rate by gender was calculated and displayed using `df.groupby('Sex')[['Survived']].mean()`.
+7. The 'Sex' column was converted from categorical to numerical values using LabelEncoder from `sklearn.preprocessing`.
+8. After encoding the 'Sex' column, non-required columns like 'Age' were dropped from the DataFrame.
 
-- `Pclass` (Ticket class)
-- `Sex` (Gender)
-- `Age`
-- `SibSp` (No. of siblings/spouses aboard)
-- `Parch` (No. of parents/children aboard)
-- `Fare`
-- `Embarked` (Port of Embarkation)
+## Model Training
 
-## 🛠️ Technologies
+1. The feature matrix `X` and target vector `Y` were created using relevant columns from the DataFrame.
+2. The dataset was split into training and testing sets using `train_test_split` from `sklearn.model_selection`.
+3. A logistic regression model was initialized and trained on the training data using `LogisticRegression` from `sklearn.linear_model`.
 
-- Python 3
-- Pandas
-- NumPy
-- Scikit-learn
-- Matplotlib / Seaborn
-- Google Colab / Jupyter Notebook
+## Model Prediction
 
-## 🧪 Model Pipeline
-
-1. **Data Cleaning**: Handle missing values, encode categorical variables.
-2. **Feature Engineering**: Extract titles from names, create family size feature, etc.
-3. **Modeling**:
-    - Logistic Regression
-    - Decision Tree
-    - Random Forest
-    - Support Vector Machine
-4. **Evaluation**: Accuracy, Confusion Matrix, Cross-Validation
-5. **Visualization**: Survival rates by sex, class, and age group
-
-## 📈 Example Output
-
-- Accuracy Score: ~80%
-- Confusion Matrix: shows TP, FP, FN, TN
-- Graphs: Survival rate by gender/class, Age distribution, etc.
-
-## 🚀 How to Run
-
-### In Google Colab:
-1. Upload `train.csv` and `test.csv` files.
-2. Open the notebook: [Titanic_Prediction.ipynb](#)
-3. Run all cells step-by-step.
-
-### Locally:
-```bash
-git clone https://github.com/yourusername/titanic-prediction.git
-cd titanic-prediction
-pip install -r requirements.txt
-python titanic_model.py
+1. The model was used to predict the survival status of passengers in the test set.
+2. The predicted results were printed using `log.predict(X_test)`.
+3. The actual target values in the test set were printed using `Y_test`.
+4. A sample prediction was made using `log.predict([[2, 
